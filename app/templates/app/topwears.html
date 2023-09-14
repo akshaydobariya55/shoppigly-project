@@ -7,6 +7,9 @@
   <div class="col-sm-3">
     <div class="list-group">
         <a href="{% url 'topwears' %}" class='list-group-item list-group-item-action' aria-current="true">All topwears</a>
+        {% for b in brands %}
+        <a href="{% url 'topdata' b %}" class='list-group-item list-group-item-action' aria-current="true">{{b}}</a>
+        {% endfor %}
         
 
     </div>
