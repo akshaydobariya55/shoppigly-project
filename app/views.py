@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect , HttpResponse
 from django.views import View
 from .models import Customer , Product , Cart , OrderPLaced 
 from .forms import CustomerRegistrationForm , CustomerProfileForm
@@ -230,3 +230,16 @@ class ProfileView(View):
     reg.save()
     messages.success(request , "Congretulations Profile upadted successfully!")
   return render(request , 'app/profile.html',{'form':form , 'active':'btn-primary'})
+
+
+def search(request):
+  query = request.GET['query']
+  if query:
+    topwears = Product.objects.filter(category="TW").filter(title__icontains=query)
+    bottomwears = Product.objects.filter(category='BW').filter(title__icontains=query)
+    mobiles=Product.objects.filter(category="M").filter(title__icontains=query)
+    return render(request , 'app/search.html', {'topwears':topwears , 'bottomwears':bottomwears,'mobiles':mobiles})
+  else:
+   return render(request,'app/notfount.html')
+   
+#  return HttpResponse("This is search")

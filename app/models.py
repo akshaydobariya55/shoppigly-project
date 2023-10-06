@@ -48,7 +48,6 @@ class Customer(models.Model):
     zipcode = models.IntegerField()
     state = models.CharField(choices=STATE_CHOICES , max_length=50)
 
-
     def __str__(self):
         return str(self.id)
     
