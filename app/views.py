@@ -130,7 +130,7 @@ def address(request):
 @login_required
 def orders(request):
  op = OrderPLaced.objects.filter(user = request.user)
- return render(request, 'app/orders.html',{'order_placed':op})
+ return render(request, 'app/orders.html',{'order_placed':op}) 
 
 def mobile(request,data=None,):
   brands = Product.objects.filter(category="M").values_list('brand',flat=True).distinct()
