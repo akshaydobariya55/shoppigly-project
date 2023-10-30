@@ -7,6 +7,20 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
+
+def common_function(request,category,data=None):
+ brands = Product.objects.filter(category=category).values_list('brand',flat=True).distinct()
+ if data==None:
+    products = Product.objects.filter(category=category)
+ else:
+    products =  Product.objects.filter(category=category).filter(brand=data)
+ 
+ details = {'products':products,'brands':brands}
+
+ return details
+ 
+
 class ProductView(View):
  def get(self , request):
   topwears = Product.objects.filter(category="TW")
@@ -133,45 +147,21 @@ def orders(request):
  return render(request, 'app/orders.html',{'order_placed':op}) 
 
 def mobile(request,data=None,):
-  brands = Product.objects.filter(category="M").values_list('brand',flat=True).distinct()
-  print(brands)
-  if data==None:
-    mobiles = Product.objects.filter(category="M")
-  else:
-    mobiles =  Product.objects.filter(category="M").filter(brand=data)
-  return render(request, 'app/mobile.html',{'mobiles':mobiles , 'brands':brands})
-  # if data == None:
-  #   mobiles = Product.objects.filter(category="M")
-  # elif data == "redmi" or data=="oppo" or data=="redmi":
-  #  mobiles =  Product.objects.filter(category="M").filter(brand=data)
-  # elif data == 'below':
-  #  mobiles =  Product.objects.filter(category="M").filter(discount_price__lt=10000)
-  # elif data == 'above':
-  #  mobiles =  Product.objects.filter(category="M").filter(discount_price__gt=10000)
+  content = common_function(request,'M',data)
+  return render(request,'app/mobile.html',content)
+  
 def laptop(request,data=None):
- brands = Product.objects.filter(category="L").values_list('brand',flat=True).distinct()
- if data == None:
-  laptops = Product.objects.filter(category="L")
- else:
-  laptops = Product.objects.filter(category="L").filter(brand = data)
- return render(request , 'app/laptop.html',{'laptops':laptops,'brands':brands})
+  content = common_function(request,'L',data)
+  return render(request,'app/laptop.html',content)
   
 
 def topwears(request , data=None):
-  brands = Product.objects.filter(category="TW").values_list('brand',flat=True).distinct()
-  if data == None:
-    topwears = Product.objects.filter(category="TW")
-  else:
-    topwears =  Product.objects.filter(category="TW").filter(brand=data)
-  return render(request, 'app/topwears.html',{'topwears':topwears ,'brands':brands})
+  content = common_function(request,'TW',data)
+  return render(request,'app/topwears.html',content)
 
 def bottomwears(request , data=None):
-  brands = Product.objects.filter(category="BW").values_list('brand',flat=True).distinct()
-  if data == None:
-    bottomwears = Product.objects.filter(category="BW")
-  else:
-    bottomwears = Product.objects.filter(category="BW").filter(brand=data)
-  return render(request, 'app/bottomwears.html',{'bottomwears':bottomwears,'brands':brands})
+  content = common_function(request,'BW',data)
+  return render(request,'app/bottomwears.html',content)
 
 
 class CustomerRegistrationView(View):
